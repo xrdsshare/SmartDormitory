@@ -1,0 +1,1 @@
+"./51/C51.obj" "./Alarm/Alarm.obj" "./DHT11/DHT11.obj" "./DS1302/DS1302.obj" "./HC05/HC05.obj" "./LCD12864/Lcd12864.obj" "./LCD12864/Display.obj" "./LED/LED.obj" "./Model/Model.obj" "./Schedule/Schedule.obj" "./main.obj" "../lnk_msp430f5529.cmd" -l"libmath.a" -l"libc.a" 

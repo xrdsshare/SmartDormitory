@@ -1,0 +1,357 @@
+C51 COMPILER V9.00   SMARTDORMITORY                                                        04/12/2016 17:21:09 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE SMARTDORMITORY
+OBJECT MODULE PLACED IN SmartDormitory.OBJ
+COMPILER INVOKED BY: E:\Installwin10\MDK\C51\BIN\C51.EXE SmartDormitory.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          //********************变量声明*****************************
+   3          #define uint unsigned int
+   4          #define uchar unsigned char       
+   5          
+   6          /*Define UART parity mode*/
+   7          //#define NONE_PARITY     0   //None parity
+   8          //#define ODD_PARITY      1   //Odd parity
+   9          //#define EVEN_PARITY     2   //Even parity
+  10          //#define MARK_PARITY     3   //Mark parity
+  11          //#define SPACE_PARITY    4   //Space parity
+  12          //#define PARITYBIT EVEN_PARITY   //Testing even parity         
+  13          
+  14          sbit L0=P1^0; 
+  15          sbit L1=P1^1; 
+  16          sbit L2=P1^2; 
+  17          sbit L3=P1^3;
+  18          
+  19          sbit KL0=P1^4;           
+  20          sbit KL1=P1^5; 
+  21          sbit KL2=P1^6;           
+  22          sbit KL3=P1^7;
+  23          
+  24          sbit M0=P3^2; 
+  25          sbit M1=P3^3;            
+  26          sbit M2=P3^4;
+  27          
+  28          sbit KM0=P3^5; 
+  29          sbit KM1=P3^6; 
+  30          sbit KM2=P3^7;
+  31          
+  32          sbit I0=P2^0; 
+  33          sbit I1=P2^1;
+  34          sbit I2=P2^2;
+  35          sbit I3=P2^3;
+  36          sbit I4=P2^4;
+  37          
+  38          sbit C0=P2^5;
+  39          sbit KC0=P2^6;
+  40          
+  41          sbit DO0=P2^7;
+  42          
+  43          int ColValue = 0x0002;
+  44          int ColValueTemp;
+  45          uchar iss = 0;
+  46          
+  47          //*******************函数声明******************************
+  48          void delay(uint z);
+  49          bit col_wei(uchar wei);
+  50          void keysd();
+  51          void mainshow();
+  52          void Init_Serialport1();
+  53          void tsend(int datas);
+  54          
+  55          //************************************************************
+C51 COMPILER V9.00   SMARTDORMITORY                                                        04/12/2016 17:21:09 PAGE 2   
+
+  56          
+  57          //---------------------主函数-------------------------------
+  58          
+  59          //************************************************************
+  60          
+  61          void main()
+  62          {
+  63   1              Init_Serialport1();
+  64   1              M0 = 1;
+  65   1      
+  66   1              while (1)
+  67   1              {        
+  68   2                      mainshow();     
+  69   2                      keysd();
+  70   2              }               
+  71   1      }
+  72          
+  73          /*************************************************
+  74          
+  75           函数(模块)名称:delay()
+  76          
+  77           功能:        简单延时函数
+  78          
+  79           *************************************************/
+  80          
+  81          void delay(uint z)
+  82          {
+  83   1              uint x,y;
+  84   1              for(x=z;x>0;x--)
+  85   1                      for(y=110;y>0;y--);
+  86   1      }
+  87          
+  88          /*************************************************
+  89          
+  90           函数(模块)名称:  mainshow();
+  91          
+  92           功能:        根据ColValue的显示控制函数
+  93          
+  94           *************************************************/
+  95          
+  96          void mainshow(){
+  97   1              L0 = col_wei(0);        
+  98   1              L1 = col_wei(1);  
+  99   1              L2 = col_wei(2);
+ 100   1              L3 = col_wei(3);
+ 101   1              M0 = col_wei(4);
+ 102   1              M1 = col_wei(5);
+ 103   1              M2 = col_wei(6);
+ 104   1              I0 = col_wei(7);
+ 105   1              I1 = col_wei(8);
+ 106   1              I2 = col_wei(9);
+ 107   1              I3 = col_wei(10);
+ 108   1              I4 = col_wei(11);
+ 109   1              C0 = col_wei(12);
+ 110   1              DO0 = col_wei(13);       
+ 111   1      }
+ 112          
+ 113          /*************************************************
+ 114          
+ 115           函数(模块)名称:  keysd();
+ 116          
+ 117           功能:        按键扫描函数
+C51 COMPILER V9.00   SMARTDORMITORY                                                        04/12/2016 17:21:09 PAGE 3   
+
+ 118          
+ 119           *************************************************/
+ 120          
+ 121          void keysd(){   
+ 122   1              if(KL0==0)
+ 123   1              {
+ 124   2                      delay(5);
+ 125   2                      if(KL0==0)
+ 126   2                      {
+ 127   3                              ColValue ^= 0x0001; 
+ 128   3                              tsend(ColValue);
+ 129   3                      } 
+ 130   2                      while(!KL0);
+ 131   2                      delay(5);
+ 132   2                      while(!KL0);
+ 133   2              }
+ 134   1                 
+ 135   1              if(KL1==0)
+ 136   1              {  
+ 137   2                      delay(5);
+ 138   2                      if(KL1==0)
+ 139   2                      {
+ 140   3                              ColValue ^= 0x0002; 
+ 141   3                              tsend(ColValue);
+ 142   3                      } 
+ 143   2                      while(!KL1);
+ 144   2                      delay(5);
+ 145   2                      while(!KL1);
+ 146   2              } 
+ 147   1      
+ 148   1              if(KL2==0)
+ 149   1              {  
+ 150   2                      delay(5);
+ 151   2                      if(KL2==0)
+ 152   2                      {
+ 153   3                              ColValue ^= 0x0004; 
+ 154   3                              tsend(ColValue);
+ 155   3                      } 
+ 156   2                      while(!KL2);
+ 157   2                      delay(5);
+ 158   2                      while(!KL2);
+ 159   2              } 
+ 160   1      
+ 161   1              if(KL3==0)
+ 162   1              {  
+ 163   2                      delay(5);
+ 164   2                      if(KL3==0)
+ 165   2                      {
+ 166   3                              ColValue ^= 0x0008; 
+ 167   3                              tsend(ColValue);
+ 168   3                      } 
+ 169   2                      while(!KL3);
+ 170   2                      delay(5);
+ 171   2                      while(!KL3);
+ 172   2              } 
+ 173   1      
+ 174   1              if(KM0==0)
+ 175   1              {  
+ 176   2                      delay(5);
+ 177   2                      if(KM0==0)
+ 178   2                      {
+ 179   3                              ColValue ^= 0x0010; 
+C51 COMPILER V9.00   SMARTDORMITORY                                                        04/12/2016 17:21:09 PAGE 4   
+
+ 180   3                              tsend(ColValue);
+ 181   3                      } 
+ 182   2                      while(!KM0);
+ 183   2                      delay(5);
+ 184   2                      while(!KM0);
+ 185   2              }  
+ 186   1      
+ 187   1              if(KM1==0)
+ 188   1              {  
+ 189   2                      delay(5);
+ 190   2                      if(KM1==0)
+ 191   2                      {
+ 192   3                              ColValue ^= 0x0020; 
+ 193   3                              tsend(ColValue);
+ 194   3                      } 
+ 195   2                      while(!KM1);
+ 196   2                      delay(5);
+ 197   2                      while(!KM1);
+ 198   2              }  
+ 199   1      
+ 200   1              if(KM2==0)
+ 201   1              {  
+ 202   2                      delay(5);
+ 203   2                      if(KM2==0)
+ 204   2                      {
+ 205   3                              ColValue ^= 0x0040; 
+ 206   3                              tsend(ColValue);
+ 207   3                      } 
+ 208   2                      while(!KM2);
+ 209   2                      delay(5);
+ 210   2                      while(!KM2);
+ 211   2              }
+ 212   1      
+ 213   1              if(KC0==0)
+ 214   1              {  
+ 215   2                      delay(5);
+ 216   2                      if(KC0==0)
+ 217   2                      {
+ 218   3                              ColValue ^= 0x2000; 
+ 219   3                              tsend(ColValue);
+ 220   3                      } 
+ 221   2                      while(!KC0);
+ 222   2                      delay(5);
+ 223   2                      while(!KC0);
+ 224   2              } 
+ 225   1      }
+ 226          
+ 227          /*************************************************
+ 228          
+ 229           函数(模块)名称:  col_wei();
+ 230          
+ 231           功能:        mainshow()函数中的判断及位移处理函数
+ 232          
+ 233           *************************************************/
+ 234          
+ 235          bit col_wei(uchar wei){
+ 236   1              bit b = 0;
+ 237   1              int ColTemp = ColValue;
+ 238   1              ColTemp >>= wei;
+ 239   1              b = ColTemp & 1;
+ 240   1              return b;       
+ 241   1      }
+C51 COMPILER V9.00   SMARTDORMITORY                                                        04/12/2016 17:21:09 PAGE 5   
+
+ 242          
+ 243          /*************************************************
+ 244          
+ 245           函数(模块)名称:        Init_Serialport1();
+ 246          
+ 247           功能:        初始化LED
+ 248          
+ 249           *************************************************/
+ 250          
+ 251          void Init_Serialport1()  //初始化串口1（Serial port）
+ 252          {  
+ 253   1      /*      #if (PARITYBIT == NONE_PARITY)
+ 254   1                  SCON = 0x50;            //8-bit variable UART
+ 255   1              #elif (PARITYBIT == ODD_PARITY) || (PARITYBIT == EVEN_PARITY) || (PARITYBIT == MARK_PARITY)
+ 256   1                  SCON = 0xda;            //9-bit variable UART, parity bit initial to 1
+ 257   1              #elif (PARITYBIT == SPACE_PARITY)
+ 258   1                  SCON = 0xd2;            //9-bit variable UART, parity bit initial to 0
+ 259   1              #endif                             */
+ 260   1              TMOD=TMOD&0x0F;
+ 261   1              TMOD=0x20;
+ 262   1              TH1=0xFD;
+ 263   1              TL1=0xFD;
+ 264   1              TR1=1;
+ 265   1              SCON=SCON&0x0F;
+ 266   1              SCON=0x50;
+ 267   1              SM0=0;
+ 268   1              SM1=1;
+ 269   1              EA=1;
+ 270   1              ES=1;
+ 271   1      }       
+ 272          
+ 273          /*************************************************
+ 274          
+ 275           函数(模块)名称:tsend();
+ 276          
+ 277           功能:        发送转换函数
+ 278          
+ 279           *************************************************/
+ 280          
+ 281          void tsend(int datas) {
+ 282   1              uchar table[2]; 
+ 283   1              table[1] = (char)((datas & 0xFF00) >> 8);
+ 284   1              table[0] = (char)(datas & 0x00FF);      
+ 285   1              ES=0;
+ 286   1              SBUF=table[1];
+ 287   1              while(TI==0);     
+ 288   1              TI=0;  
+ 289   1              
+ 290   1              SBUF=table[0];
+ 291   1              while(TI==0);     
+ 292   1              TI=0; 
+ 293   1              ES=1;           
+ 294   1      }
+ 295          
+ 296          /*************************************************
+ 297          
+ 298           函数(模块)名称:ser_int()
+ 299          
+ 300           功能:        处理接收中断
+ 301          
+ 302           *************************************************/
+ 303          
+C51 COMPILER V9.00   SMARTDORMITORY                                                        04/12/2016 17:21:09 PAGE 6   
+
+ 304          void ser_int (void) interrupt 4 
+ 305          {
+ 306   1              if(RI == 1) { 
+ 307   2                      RI = 0;      //清除标志.
+ 308   2                      if (iss == 0) {
+ 309   3                              ColValueTemp = 0;
+ 310   3                              ColValueTemp |= (SBUF & 0x00ff);
+ 311   3                              iss++;
+ 312   3                      } else if (iss == 1) {
+ 313   3                              ColValueTemp <<= 8;
+ 314   3                              ColValueTemp |= (SBUF & 0x00ff);
+ 315   3                              iss = 0;
+ 316   3      //                      tsend(ColValueTemp);
+ 317   3                              if (ColValueTemp == 0x4001) {
+ 318   4                                      tsend(ColValue);
+ 319   4                              } else {
+ 320   4                                      ColValue = ColValueTemp;
+ 321   4                              }
+ 322   3                      }
+ 323   2              }
+ 324   1      } 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    514    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

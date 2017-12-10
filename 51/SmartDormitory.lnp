@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"SmartDormitory.obj" 
+TO "SmartDormitory" 
+RAMSIZE(256) 

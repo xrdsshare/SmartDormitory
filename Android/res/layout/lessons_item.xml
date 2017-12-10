@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.xrdsgzs.android.dianhuaku.MainActivity" >
+
+    <TextView
+        android:id="@+id/tv_leweek0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ib_leweek"
+        android:layout_marginLeft="@dimen/activity_lesson_margin"
+        android:background="@color/blue"
+        android:text="1-17周"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+
+    <ImageButton
+        android:id="@+id/ib_leweek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_lesson_margin"
+        android:layout_marginRight="@dimen/activity_lesson_margin"
+        android:layout_marginTop="@dimen/activity_lesson_margin"
+        android:layout_toRightOf="@+id/tv_leweek0"
+        android:src="@drawable/weeks" />
+
+    <TextView
+        android:id="@+id/tv_leweek1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ib_leweek"
+        android:layout_gravity="center_vertical"
+        android:layout_toRightOf="@+id/ib_leweek"
+        android:text="1~2节"
+        android:textColor="@color/black"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/tv_leweekd0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ib_leweekd"
+        android:layout_alignRight="@+id/tv_leweek0"
+        android:background="@color/blue"
+        android:text="周一"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+
+    <ImageButton
+        android:id="@+id/ib_leweekd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ib_leweek"
+        android:layout_below="@+id/ib_leweek"
+        android:layout_marginBottom="@dimen/activity_lesson_margin"
+        android:layout_marginTop="@dimen/activity_lesson_margin"
+        android:src="@drawable/weeks" />
+
+    <TextView
+        android:id="@+id/tv_leweekd1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ib_leweekd"
+        android:layout_alignLeft="@+id/tv_leweek1"
+        android:text="教1-423"
+        android:textColor="@color/black"
+        android:textSize="20dp" />
+
+</RelativeLayout>
